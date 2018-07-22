@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "Setting up release build (-O3 optimizations) in ./build_ directory... " && \
+mkdir -p _build && cd _build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. && cd .. 
