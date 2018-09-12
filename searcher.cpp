@@ -15,13 +15,13 @@ public:
   searcher(int k_)
       : k(k_), window(2 * k_ + 1){}
 
-  auto find_d_k(uint64_t p) {
+  auto find_d_k(uint64_t p, int jump = 2) {
     window.clear();
     uint64_t half = (p - 1) / 2;
-    for (uint64_t it = 1; it < half; ++it) {
+    for (uint64_t it = 1; it < half; it += jump) {
       window.insert(n_jacobi_unsigned(it, p));
       if (window.sum() <= 0) {
-        return it - 1 - k;
+        return (it - jump)/jump - k;
       }
     }
     return static_cast<uint64_t>(0);
@@ -50,7 +50,7 @@ public:
     } else
       primes_for_num_gen.swap(primes);
 
-    std::tuple<std::vector<int>, int> init_state = {{7}, 8}; // require p to be:    p \equiv 7  (mod 8)
+    std::tuple<std::vector<int>, int> init_state = {{3}, 4}; // require p to be:    p \equiv 7  (mod 8)
 
     auto[C, len] = accumulate(primes_for_num_gen, init_state, [](auto &&set_setlen, int prime) {
           return intersect_congruences(get<0>(set_setlen), get<1>(set_setlen),
@@ -108,7 +108,13 @@ int main(int argc, char *argv[]) {
     std::cerr << "usage: " << argv[0] << " <search offset> <k> <D0> <Dk>\n";
     return EXIT_FAILURE;
   } else {
-    searcher s(std::stoi(argv[2]));
+    auto k = std::stoi(argv[2]);
+
+    //std::cout << "win len: " << k << "\n";
+    searcher s(k);
+
+    //std::cout << s.find_d_k(9223372043619448571UL) << "\n";
+
     s.start_search(std::stoull(argv[1]), std::stoi(argv[3]), std::stoi(argv[4]));
     return EXIT_SUCCESS;
   }

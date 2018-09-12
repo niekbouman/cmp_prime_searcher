@@ -12,7 +12,7 @@ public:
   }
 
   void clear() { std::fill(v.begin(), v.end(), 0); }
-  int sum() { return std::accumulate(v.begin(), v.end(), 0); }
+  int sum() { return std::accumulate(v.begin(), v.end(), static_cast<int>(0)); }
 
 private:
   int pos;

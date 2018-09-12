@@ -6,9 +6,9 @@
 #include <vector>
 
 template <typename T>
-void write_ones(std::vector<T> &v, int p, int D0, int Dk, int k) {
-  for (auto m = p; m < Dk; m += p) 
-    for (int i = 0; i < 2 * k + 1; ++i)
+void write_ones(std::vector<T> &v, int p, int D0, int Dk, int k, int jump = 1) {
+  for (auto m = p; m < Dk; m += p)
+    for (int i = 0; i < jump * (2 * k + 1); i += jump)
       v.at(m - D0 + i) += 1;
 }
 
@@ -20,17 +20,17 @@ bool is_related_tuple(Iterable&& primes, int k, int D0, int Dk) {
   return std::find(std::begin(v), std::end(v), k + 1) != std::end(v);
 }
 
-bool is_related_pair(int p, int q, int D0, int D1);
-bool is_related_triple(int p, int q, int r, int D0, int D2);
+bool is_related_pair(int p, int q, int D0, int D1, int jump = 1);
+bool is_related_triple(int p, int q, int r, int D0, int D2, int jump = 1);
 
 // range of primes in [a,b)
 std::vector<int> prime_range(int a, int b);
 
 // list of related prime pairs in [D0, D1)
-std::vector<std::tuple<int,int>> related_pairs(int D0, int D1);
+std::vector<std::tuple<int,int>> related_pairs(int D0, int D1, int jump = 2);
 
 // list of related prime triples in [D0, D2)
-std::vector<std::tuple<int,int,int>> related_triples(int D0, int D2);
+std::vector<std::tuple<int,int,int>> related_triples(int D0, int D2, int jump = 2);
 
 // list of related prime (k+1)-tuples in [D0, Dk)
 std::vector<std::vector<int>> related_tuples(int k, int D0, int Dk);
